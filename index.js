@@ -39,17 +39,16 @@ function askForRequirements() {
     ]
     }
 
-])
-  .then(function(response) {
+]).then(function(response) {
     // Use user feedback for... whatever!!
-    console.log(response)
-    const password = new GenPassObj(response.length, response.characters);
-    console.log(password);
-    let newArr = password.generatePassword();
+    const passwordOptions = new GenPassObj(response.length, response.characters);
+
+    let newArr = passwordOptions.generatePassword();
     for (i=1;i<=(response.length);i++) {
         let rand = newArr[Math.floor(Math.random()*newArr.length)];
         newPass = newPass.concat(rand);
     }
+    console.log("Your new password: ", newPass);
 });
 }
 
@@ -86,7 +85,6 @@ class GenPassObj {
             if ((this.characters).includes('Symbols')) {
                 passArr = [...passArr, ...allOPtions.symbols];
         }
-        
         return passArr ;
         }
 

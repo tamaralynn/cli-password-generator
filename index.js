@@ -1,47 +1,58 @@
-var inquirer = require('inquirer');
-//var copy = require('copy-to-clipboard')
+const inquirer = require('inquirer');
 
+let newPass="";
+//Set all available options for password in JSON
+const allOptions = {
+    numbers: "0123456789",
+    lowercase: "abcdefghijklmnopqrstuvwxyz",
+    uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    symbols: "!#$%&'()*+,-./:;<=>?@[\\\"]^_`{|}~",
+    };
 
-function askForRequirements(){
+function askForRequirements() {
  inquirer
   .prompt([
     /* Pass your questions in here */  
     {
         type: 'number',
         message: 'How long would you like your password (Choose a number between 8 and 128)?',
-        name: 'number',
+        name: 'length',
     }, 
-   { type: 'confirm',
-    message: 'Would you like to include uppercase letters?',
-    name: 'wantUppercase'
-},
-{ type: 'confirm',
-message: 'Would you like to include lowercase letters?',
-name: 'wantLowercase',
-},
-{ type: 'confirm',
-message: 'Would you like to include numbers?',
-name: 'wantNumbers',
-},
-{ type: 'confirm',
-message: 'Would you like to include uppercase symbols?',
-name: 'wantSymbols',
-},
+    { 
+        type: 'checkbox',
+        message: 'Which type of characters would you like to include in your password?',
+        name: 'characters',
+        choices: [
+          {
+            name: 'Uppercase Letters'
+          },
+          {
+            name: 'Lowercase Letters'
+          },
+          {
+            name: 'Numbers'
+          },
+          {
+            name: 'Special Characters'
+          },
 
-
+    ]
+    }
 
 ])
-  .then(answers => {
+  .then(function(response) {
     // Use user feedback for... whatever!!
-    console.log(answers)
-  })
-  .catch(error => {
-    if(error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
-    } else {
-      // Something else when wrong
+    console.log(response)
+    const password = new GenPassObj(response.length, response.characters);
+    console.log(password);
+    let newArr = password.generatePassword();
+    for (i=1;i<=(response.length);i++) {
+        let rand = newArr[Math.floor(Math.random()*newArr.length)];
+        newPass = newPass.concat(rand);
     }
-  })};
+});
+}
+
 
  
 /* copy('Text');
@@ -51,5 +62,38 @@ copy('Text', {
   debug: true,
   message: 'Press #{key} to copy',
 }); */
+
+class GenPassObj {
+    constructor(length, characters) {
+        this.length = length;
+        this.characters = characters;
+    }
+
+    generatePassword() {
+
+        let passArr = [];
+
+        if (this.length > 8 && this.length < 128) {
+            if ((this.characters).includes('Numbers')) {
+                passArr = [...passArr, ...allOptions.numbers];
+            }
+            if ((this.characters).includes('Uppercase Letters')) {
+                passArr = [...passArr, ...allOptions.uppercase];
+            }
+            if ((this.characters).includes('Lowercase Letters')) {
+                passArr = [...passArr, ...allOptions.lowercase];
+            }
+            if ((this.characters).includes('Symbols')) {
+                passArr = [...passArr, ...allOPtions.symbols];
+        }
+        
+        return passArr ;
+        }
+
+         else {
+            console.log("Please follow directions and pick a length between 8 and 128, tyvm!");
+        }
+    }
+}
 
 askForRequirements();

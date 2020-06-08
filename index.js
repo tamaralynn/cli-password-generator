@@ -82,7 +82,7 @@ class GenPassObj {
             if ((this.characters).includes('Lowercase Letters')) {
                 passArr = [...passArr, ...allOptions.lowercase];
             }
-            if ((this.characters).includes('Symbols')) {
+            if ((this.characters).includes('Special Characters')) {
                 passArr = [...passArr, ...allOPtions.symbols];
         }
         return passArr ;
